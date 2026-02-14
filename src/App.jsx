@@ -1,4 +1,4 @@
-import { useState, useMemom, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo } from "react";
 import {
   MantineProvider,
   Container,
@@ -34,13 +34,14 @@ function App() {
         return false;
       }
 
-      // Фильтр по пользователю
+      // TODO - parseInt(filters.userId) вызывается для каждого заказа — вынести в переменную до циклаЕ
       if (filters.userId && order.userId !== parseInt(filters.userId)) {
         return false;
       }
 
       // Поиск
       if (filters.search) {
+        // TODO: searchLower вычисляется в каждой итерации — вынести filters.search.toLowerCase() до .filter()
         const searchLower = filters.search.toLowerCase();
         const matchesOrderId = order.id.toString().includes(searchLower);
         const matchesUserName = order.user?.name

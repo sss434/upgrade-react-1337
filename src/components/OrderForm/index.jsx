@@ -33,6 +33,7 @@ const OrderForm = ({ order, onSubmit, onCancel }) => {
   const [selectedProduct, setSelectedProduct] = useState("");
   const [quantity, setQuantity] = useState(DEFAULT_QUANTITY);
 
+  // TODO: при передаче от родителя нового объекта order (новый reference) эффект срабатывает каждый раз; при частых ререндерах родителя лучше [order?.id]
   useEffect(() => {
     if (order) {
       setFormData({
@@ -56,6 +57,7 @@ const OrderForm = ({ order, onSubmit, onCancel }) => {
   const addItem = () => {
     if (!selectedProduct) return;
 
+    // TODO - products.find на каждый клик — при большом списке товаров лучше Map(products).get(id)
     const product = products.find((p) => p.id === parseInt(selectedProduct));
     if (!product) return;
 
@@ -76,11 +78,15 @@ const OrderForm = ({ order, onSubmit, onCancel }) => {
     setFormData((prev) => ({ ...prev, items: newItems }));
   };
 
+  // TODO - пересоздаются на каждый рендер, это константа, можно вынести за компоненту
   const userOptions = createUserOptions();
+
+  // TODO - пересоздаются на каждый рендер, это константа, можно вынести за компоненту
   const productOptions = createProductOptions();
 
   console.log("rerender");
 
+  // TODO - компонент слишком большой, стоит разбить на отдельные компоненты
   return (
     <Modal
       opened={true}
@@ -164,6 +170,7 @@ const OrderForm = ({ order, onSubmit, onCancel }) => {
               <Stack gap="xs">
                 {/* TODO - блок добавляемого товара лучше в компонент вынести, так как например при обновлении количества нового товара будет рендериться вся форма */}
                 {formData.items.map((item) => {
+                  // TODO - в цикле по items для каждой позиции products.find — O(items × products); лучше один раз Map(products) и .get(item.productId)
                   const product = products.find((p) => p.id === item.productId);
                   return (
                     <Paper key={item.productId} p="md" withBorder>
