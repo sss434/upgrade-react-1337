@@ -5,6 +5,7 @@ import {
   TABLE_TITLE,
 } from "../../constants/orderList.js";
 import OrderRow from "../OrderRow";
+import { memo } from "react";
 
 const OrderList = ({ orders, onEditOrder, onDeleteOrder, onViewOrder }) => {
   if (orders.length === 0) {
@@ -38,9 +39,10 @@ const OrderList = ({ orders, onEditOrder, onDeleteOrder, onViewOrder }) => {
           <Table.Tbody>
             {orders.map((row) => (
               <OrderRow
-                key={row.id}
+                // TODO - вот тут ключа нет, нужно добавить
                 order={row}
-                onEditOrder={onEditOrder}
+                // TODO - вот тут функция постоянно будет пересоздаваться на каждый рендер
+                onEditOrder={(order) => onEditOrder(order)}
                 onDeleteOrder={onDeleteOrder}
                 onViewOrder={onViewOrder}
               />
@@ -52,4 +54,4 @@ const OrderList = ({ orders, onEditOrder, onDeleteOrder, onViewOrder }) => {
   );
 };
 
-export default OrderList;
+export default memo(OrderList);

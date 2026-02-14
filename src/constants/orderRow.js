@@ -1,11 +1,5 @@
 // Константы для компонента OrderRow
 
-export const BUTTON_LABELS = {
-  VIEW: 'Просмотр',
-  EDIT: 'Изменить',
-  DELETE: 'Удалить'
-};
-
 export const BUTTON_VARIANTS = {
   VIEW: 'light',
   EDIT: 'filled',

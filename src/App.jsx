@@ -1,36 +1,34 @@
-import { useState, useMemo } from 'react';
-import { MantineProvider, Container, Title, Button, Space } from '@mantine/core';
-import '@mantine/core/styles.css';
-import { useOrders } from './hooks/useOrders.js';
-import OrderList from './components/OrderList';
-import OrderForm from './components/OrderForm';
-import OrderDetails from './components/OrderDetails';
-import OrderFilters from './components/OrderFilters';
+import { useState, useMemom, useCallback, useMemo } from "react";
+import {
+  MantineProvider,
+  Container,
+  Title,
+  Button,
+  Space,
+} from "@mantine/core";
+import "@mantine/core/styles.css";
+import { useOrders } from "./hooks/useOrders.js";
+import OrderList from "./components/OrderList";
+import OrderForm from "./components/OrderForm";
+import OrderDetails from "./components/OrderDetails";
+import OrderFilters from "./components/OrderFilters";
 
 function App() {
-  const { 
-    orders, 
-    createOrder, 
-    updateOrder, 
-    deleteOrder, 
-    getOrdersWithDetails 
-  } = useOrders();
+  const { createOrder, updateOrder, deleteOrder, ordersWithDetails } =
+    useOrders();
 
   const [showForm, setShowForm] = useState(false);
   const [editingOrder, setEditingOrder] = useState(null);
   const [viewingOrder, setViewingOrder] = useState(null);
   const [filters, setFilters] = useState({
-    status: '',
-    userId: '',
-    search: ''
+    status: "",
+    userId: "",
+    search: "",
   });
 
   // Получаем заказы с полной информацией
-  const ordersWithDetails = getOrdersWithDetails();
-
-  // Фильтрация заказов
   const filteredOrders = useMemo(() => {
-    return ordersWithDetails.filter(order => {
+    return ordersWithDetails.filter((order) => {
       // Фильтр по статусу
       if (filters.status && order.status !== filters.status) {
         return false;
@@ -45,9 +43,13 @@ function App() {
       if (filters.search) {
         const searchLower = filters.search.toLowerCase();
         const matchesOrderId = order.id.toString().includes(searchLower);
-        const matchesUserName = order.user?.name.toLowerCase().includes(searchLower);
-        const matchesUserEmail = order.user?.email.toLowerCase().includes(searchLower);
-        
+        const matchesUserName = order.user?.name
+          .toLowerCase()
+          .includes(searchLower);
+        const matchesUserEmail = order.user?.email
+          .toLowerCase()
+          .includes(searchLower);
+
         if (!matchesOrderId && !matchesUserName && !matchesUserEmail) {
           return false;
         }
@@ -62,16 +64,11 @@ function App() {
     setShowForm(true);
   };
 
-  const handleEditOrder = (order) => {
-    setEditingOrder(order);
-    setShowForm(true);
-    setViewingOrder(null);
-  };
-
-  const handleViewOrder = (order) => {
-    const orderWithDetails = ordersWithDetails.find(o => o.id === order.id);
+  const handleViewOrder = useCallback((order) => {
+    // TODO - в этой функции по сути не нужен весь order, тут нужен только id
+    const orderWithDetails = ordersWithDetails.find((o) => o.id === order.id);
     setViewingOrder(orderWithDetails);
-  };
+  }, []);
 
   const handleFormSubmit = (formData) => {
     if (editingOrder) {
@@ -88,8 +85,9 @@ function App() {
     setEditingOrder(null);
   };
 
+  // TODO - Вот тут тоже функция постоянно будет пересоздаваться на каждый рендер, следовательно memo в orderList не поможет
   const handleDeleteOrder = (orderId) => {
-    if (window.confirm('Вы уверены, что хотите удалить этот заказ?')) {
+    if (window.confirm("Вы уверены, что хотите удалить этот заказ?")) {
       deleteOrder(orderId);
     }
   };
@@ -101,49 +99,48 @@ function App() {
   return (
     <MantineProvider>
       <Container size="xl" py="xl">
-        <Title order={1} mb="xl">Управление заказами</Title>
+        <Title order={1} mb="xl">
+          Управление заказами
+        </Title>
 
-        {/* Фильтры */}
-        <OrderFilters 
-          filters={filters}
-          onFiltersChange={setFilters}
-        />
+        <OrderFilters filters={filters} onFiltersChange={setFilters} />
 
         <Space h="xl" />
 
-        {/* Кнопка создания заказа */}
-        <Button 
-          color="green"
-          size="md"
-          onClick={handleCreateOrder}
-          mb="xl"
-        >
+        <Button color="green" size="md" onClick={handleCreateOrder} mb="xl">
           + Создать заказ
         </Button>
 
-        {/* Список заказов */}
-        <OrderList 
+        <OrderList
           orders={filteredOrders}
-          onEditOrder={handleEditOrder}
+          // TODO - надо вынести в отдельную функцию, хендлер для onEditOrder и использовать в callback, сейчас функцию пересоздается и не мемоизируется
+          onEditOrder={(order) => {
+            setEditingOrder(order);
+            setShowForm(true);
+            setViewingOrder(null);
+          }}
           onDeleteOrder={handleDeleteOrder}
           onViewOrder={handleViewOrder}
         />
 
-        {/* Форма создания/редактирования */}
         {showForm && (
-          <OrderForm 
+          <OrderForm
             order={editingOrder}
             onSubmit={handleFormSubmit}
             onCancel={handleFormCancel}
           />
         )}
 
-        {/* Детали заказа */}
         {viewingOrder && (
-          <OrderDetails 
+          <OrderDetails
             order={viewingOrder}
             onClose={handleCloseDetails}
-            onEdit={handleEditOrder}
+            // TODO - надо вынести в отдельную функцию, хендлер для onEditOrder и использовать в callback, сейчас функцию пересоздается и не мемоизируется, также происходит дублирование функции
+            onEdit={(order) => {
+              setEditingOrder(order);
+              setShowForm(true);
+              setViewingOrder(null);
+            }}
           />
         )}
       </Container>

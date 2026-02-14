@@ -1,27 +1,39 @@
-import { Paper, Title, TextInput, Select, Button, Group, Grid } from '@mantine/core';
-import { 
-  FILTER_LABELS, 
-  PLACEHOLDERS, 
-  STATUS_OPTIONS 
-} from '../../constants/orderFilters.js';
-import { createUserOptions, hasActiveFilters } from '../../utils/components/orderFilters.js';
+import {
+  Paper,
+  Title,
+  TextInput,
+  Select,
+  Button,
+  Group,
+  Grid,
+} from "@mantine/core";
+import {
+  FILTER_LABELS,
+  PLACEHOLDERS,
+  STATUS_OPTIONS,
+} from "../../constants/orderFilters.js";
+import {
+  createUserOptions,
+  hasActiveFilters,
+} from "../../utils/components/orderFilters.js";
 
 const OrderFilters = ({ filters, onFiltersChange }) => {
   const handleFilterChange = (key, value) => {
     onFiltersChange({
       ...filters,
-      [key]: value
+      [key]: value,
     });
   };
 
   const clearFilters = () => {
     onFiltersChange({
-      status: '',
-      userId: '',
-      search: ''
+      status: "",
+      userId: "",
+      search: "",
     });
   };
 
+  // Опции создаются на каждый рендер, это не очень хорошо. По итогу это будет константа, следовательно вынеси это за компонент.
   const userOptions = createUserOptions();
   const showClearButton = hasActiveFilters(filters);
 
@@ -30,11 +42,7 @@ const OrderFilters = ({ filters, onFiltersChange }) => {
       <Group justify="space-between" mb="md">
         <Title order={3}>{FILTER_LABELS.TITLE}</Title>
         {showClearButton && (
-          <Button 
-            variant="light"
-            size="sm"
-            onClick={clearFilters}
-          >
+          <Button variant="light" size="sm" onClick={clearFilters}>
             {FILTER_LABELS.CLEAR}
           </Button>
         )}
@@ -42,11 +50,11 @@ const OrderFilters = ({ filters, onFiltersChange }) => {
 
       <Grid>
         <Grid.Col span={{ base: 12, sm: 4 }}>
+          {/* Вот тут происходате обновление фильтров на каждый ввод символа, сюда было бы неплохо добавить debounce */}
           <TextInput
             label={FILTER_LABELS.SEARCH}
             placeholder={PLACEHOLDERS.SEARCH}
-            value={filters.search}
-            onChange={(e) => handleFilterChange('search', e.target.value)}
+            onChange={(e) => handleFilterChange("search", e.target.value)}
           />
         </Grid.Col>
 
@@ -55,7 +63,7 @@ const OrderFilters = ({ filters, onFiltersChange }) => {
             label={FILTER_LABELS.STATUS}
             data={STATUS_OPTIONS}
             value={filters.status}
-            onChange={(value) => handleFilterChange('status', value || '')}
+            onChange={(value) => handleFilterChange("status", value || "")}
             clearable
           />
         </Grid.Col>
@@ -65,7 +73,7 @@ const OrderFilters = ({ filters, onFiltersChange }) => {
             label={FILTER_LABELS.CLIENT}
             data={userOptions}
             value={filters.userId}
-            onChange={(value) => handleFilterChange('userId', value || '')}
+            onChange={(value) => handleFilterChange("userId", value || "")}
             clearable
           />
         </Grid.Col>

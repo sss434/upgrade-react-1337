@@ -1,18 +1,26 @@
-import { formatPrice, formatDate, formatOrderStatus, getStatusColor } from '../../utils/formatters.js';
-import { products } from '../../mockData.js';
-import { 
-  Modal, 
-  Text, 
-  Badge, 
-  Button, 
-  Group, 
-  Stack, 
-  Paper, 
-  Grid
-} from '@mantine/core';
-import { SECTION_TITLES, BUTTON_LABELS, MODAL_SIZE } from '../../constants/orderDetails.js';
+import {
+  formatPrice,
+  formatDate,
+  formatOrderStatus,
+  getStatusColor,
+} from "../../utils/formatters.js";
+import { products } from "../../mockData.js";
+import {
+  Modal,
+  Text,
+  Badge,
+  Button,
+  Group,
+  Stack,
+  Paper,
+  Grid,
+} from "@mantine/core";
+import { MODAL_SIZE } from "../../constants/orderDetails.js";
 
 const OrderDetails = ({ order, onClose, onEdit }) => {
+  // TODO - order можно деструктурировать, что бы код был более читаемым и модульным
+  // const { id, orderDate, status, user, deliveryAddress, items, totalAmount } = order;
+
   if (!order) return null;
 
   return (
@@ -27,14 +35,18 @@ const OrderDetails = ({ order, onClose, onEdit }) => {
         <Grid>
           <Grid.Col span={6}>
             <Stack gap="xs">
-              <Text size="sm" fw={500} c="dimmed">{SECTION_TITLES.ORDER_DATE}</Text>
+              <Text size="sm" fw={500} c="dimmed">
+                Дата заказа
+              </Text>
               <Text>{formatDate(order.orderDate)}</Text>
             </Stack>
           </Grid.Col>
           <Grid.Col span={6}>
             <Stack gap="xs">
-              <Text size="sm" fw={500} c="dimmed">{SECTION_TITLES.STATUS}</Text>
-              <Badge 
+              <Text size="sm" fw={500} c="dimmed">
+                Статус
+              </Text>
+              <Badge
                 color={getStatusColor(order.status)}
                 variant="filled"
                 size="lg"
@@ -47,28 +59,39 @@ const OrderDetails = ({ order, onClose, onEdit }) => {
 
         {/* Информация о клиенте */}
         <div>
-          <Text fw={500} mb="sm">{SECTION_TITLES.CLIENT_INFO}</Text>
+          <Text fw={500} mb="sm">
+            Информация о клиенте
+          </Text>
           <Paper p="md" bg="gray.0">
             <Stack gap="xs">
               <Text fw={500}>{order.user?.name}</Text>
-              <Text size="sm" c="dimmed">{order.user?.email}</Text>
-              <Text size="sm" c="dimmed">{order.user?.phone}</Text>
+              <Text size="sm" c="dimmed">
+                {order.user?.email}
+              </Text>
+              <Text size="sm" c="dimmed">
+                {order.user?.phone}
+              </Text>
             </Stack>
           </Paper>
         </div>
 
         {/* Адрес доставки */}
         <div>
-          <Text fw={500} mb="sm">{SECTION_TITLES.DELIVERY_ADDRESS}</Text>
+          <Text fw={500} mb="sm">
+            Адрес доставки
+          </Text>
           <Text c="dimmed">{order.deliveryAddress}</Text>
         </div>
 
         {/* Товары в заказе */}
         <div>
-          <Text fw={500} mb="sm">{SECTION_TITLES.ITEMS} ({order.items.length})</Text>
+          <Text fw={500} mb="sm">
+            Товары ({order.items.length})
+          </Text>
           <Stack gap="xs">
-            {order.items.map(item => {
-              const product = products.find(p => p.id === item.productId);
+            {/* TODO - Такие карточки лучше в компонент отдельный вынести, что бы код был более читаемым и модульным */}
+            {order.items.map((item) => {
+              const product = products.find((p) => p.id === item.productId);
               return (
                 <Paper key={item.productId} p="md" withBorder>
                   <Group justify="space-between">
@@ -96,7 +119,9 @@ const OrderDetails = ({ order, onClose, onEdit }) => {
         {/* Итого */}
         <Paper p="md" bg="green.0">
           <Group justify="space-between">
-            <Text fw={600} size="lg">{SECTION_TITLES.TOTAL}</Text>
+            <Text fw={600} size="lg">
+              Итого:
+            </Text>
             <Text fw={700} size="xl" c="green">
               {formatPrice(order.totalAmount)}
             </Text>
@@ -105,11 +130,9 @@ const OrderDetails = ({ order, onClose, onEdit }) => {
 
         <Group justify="flex-end" mt="xl">
           <Button variant="light" onClick={onClose}>
-            {BUTTON_LABELS.CLOSE}
+            Закрыть
           </Button>
-          <Button onClick={() => onEdit(order)}>
-            {BUTTON_LABELS.EDIT}
-          </Button>
+          <Button onClick={() => onEdit(order)}>Редактировать</Button>
         </Group>
       </Stack>
     </Modal>

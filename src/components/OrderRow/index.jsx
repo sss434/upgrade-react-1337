@@ -1,6 +1,6 @@
 import { formatPrice, formatDate, formatOrderStatus, getStatusColor } from '../../utils/formatters.js';
 import { Table, Badge, Button, Group, Stack, Text } from '@mantine/core';
-import { BUTTON_LABELS, BUTTON_VARIANTS, BUTTON_COLORS, BUTTON_SIZE } from '../../constants/orderRow.js';
+import { BUTTON_VARIANTS, BUTTON_COLORS, BUTTON_SIZE } from '../../constants/orderRow.js';
 
 const OrderRow = ({ order, onEditOrder, onDeleteOrder, onViewOrder }) => {
   return (
@@ -32,14 +32,14 @@ const OrderRow = ({ order, onEditOrder, onDeleteOrder, onViewOrder }) => {
             size={BUTTON_SIZE}
             onClick={() => onViewOrder(order)}
           >
-            {BUTTON_LABELS.VIEW}
+            Просмотр
           </Button>
           <Button 
             variant={BUTTON_VARIANTS.EDIT}
             size={BUTTON_SIZE}
             onClick={() => onEditOrder(order)}
           >
-            {BUTTON_LABELS.EDIT}
+            Изменить
           </Button>
           <Button 
             variant={BUTTON_VARIANTS.DELETE}
@@ -47,7 +47,7 @@ const OrderRow = ({ order, onEditOrder, onDeleteOrder, onViewOrder }) => {
             size={BUTTON_SIZE}
             onClick={() => onDeleteOrder(order.id)}
           >
-            {BUTTON_LABELS.DELETE}
+            Удалить
           </Button>
         </Group>
       </Table.Td>
