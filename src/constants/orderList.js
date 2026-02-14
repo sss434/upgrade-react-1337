@@ -12,10 +12,6 @@ export const TABLE_COLUMNS = [
 
 export const EMPTY_STATE_MESSAGE = 'Заказов пока нет';
 
-export const BUTTON_LABELS = {
-  VIEW: 'Просмотр',
-  EDIT: 'Изменить',
-  DELETE: 'Удалить'
-};
-
 export const TABLE_MIN_WIDTH = 800;
+
+export const TABLE_TITLE = 'Список заказов';

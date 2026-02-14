@@ -1,6 +1,10 @@
-import { formatPrice, formatDate, formatOrderStatus, getStatusColor } from '../../utils/formatters.js';
-import { Paper, Title, Text, Table, Badge, Button, Group, Stack } from '@mantine/core';
-import { EMPTY_STATE_MESSAGE, BUTTON_LABELS, TABLE_MIN_WIDTH } from '../../constants/orderList.js';
+import { Paper, Title, Text, Table } from "@mantine/core";
+import {
+  EMPTY_STATE_MESSAGE,
+  TABLE_MIN_WIDTH,
+  TABLE_TITLE,
+} from "../../constants/orderList.js";
+import OrderRow from "../OrderRow";
 
 const OrderList = ({ orders, onEditOrder, onDeleteOrder, onViewOrder }) => {
   if (orders.length === 0) {
@@ -13,60 +17,11 @@ const OrderList = ({ orders, onEditOrder, onDeleteOrder, onViewOrder }) => {
     );
   }
 
-  const rows = orders.map(order => (
-    <Table.Tr key={order.id}>
-      <Table.Td>#{order.id}</Table.Td>
-      <Table.Td>
-        <Stack gap={4}>
-          <Text fw={500}>{order.user?.name}</Text>
-          <Text size="sm" c="dimmed">{order.user?.email}</Text>
-        </Stack>
-      </Table.Td>
-      <Table.Td>{formatDate(order.orderDate)}</Table.Td>
-      <Table.Td>
-        <Badge 
-          color={getStatusColor(order.status)}
-          variant="filled"
-        >
-          {formatOrderStatus(order.status)}
-        </Badge>
-      </Table.Td>
-      <Table.Td>
-        <Text fw={600}>{formatPrice(order.totalAmount)}</Text>
-      </Table.Td>
-      <Table.Td>{order.items.length}</Table.Td>
-      <Table.Td>
-        <Group gap="xs">
-          <Button 
-            variant="light"
-            size="xs"
-            onClick={() => onViewOrder(order)}
-          >
-            {BUTTON_LABELS.VIEW}
-          </Button>
-          <Button 
-            variant="filled"
-            size="xs"
-            onClick={() => onEditOrder(order)}
-          >
-            {BUTTON_LABELS.EDIT}
-          </Button>
-          <Button 
-            variant="filled"
-            color="red"
-            size="xs"
-            onClick={() => onDeleteOrder(order.id)}
-          >
-            {BUTTON_LABELS.DELETE}
-          </Button>
-        </Group>
-      </Table.Td>
-    </Table.Tr>
-  ));
-
   return (
     <Paper p="md" withBorder>
-      <Title order={3} mb="md">Список заказов ({orders.length})</Title>
+      <Title order={3} mb="md">
+        {TABLE_TITLE} ({orders.length})
+      </Title>
       <Table.ScrollContainer minWidth={TABLE_MIN_WIDTH}>
         <Table striped highlightOnHover>
           <Table.Thead>
@@ -81,7 +36,15 @@ const OrderList = ({ orders, onEditOrder, onDeleteOrder, onViewOrder }) => {
             </Table.Tr>
           </Table.Thead>
           <Table.Tbody>
-            {rows}
+            {orders.map((row) => (
+              <OrderRow
+                key={row.id}
+                order={row}
+                onEditOrder={onEditOrder}
+                onDeleteOrder={onDeleteOrder}
+                onViewOrder={onViewOrder}
+              />
+            ))}
           </Table.Tbody>
         </Table>
       </Table.ScrollContainer>
