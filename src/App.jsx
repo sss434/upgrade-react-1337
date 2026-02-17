@@ -65,11 +65,16 @@ function App() {
     setShowForm(true);
   };
 
-  const handleViewOrder = useCallback((order) => {
-    // TODO - в этой функции по сути не нужен весь order, тут нужен только id
-    const orderWithDetails = ordersWithDetails.find((o) => o.id === order.id);
-    setViewingOrder(orderWithDetails);
-  }, []);
+  const handleViewOrder = useCallback(
+    (order) => {
+      // TODO - в этой функции по сути не нужен весь order, тут нужен только id
+      const orderWithDetailsNew = ordersWithDetails.find(
+        (o) => o.id === order.id,
+      );
+      setViewingOrder(orderWithDetailsNew);
+    },
+    [setViewingOrder, ordersWithDetails],
+  );
 
   const handleFormSubmit = (formData) => {
     if (editingOrder) {

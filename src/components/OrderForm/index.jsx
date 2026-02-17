@@ -34,6 +34,7 @@ const OrderForm = ({ order, onSubmit, onCancel }) => {
   const [quantity, setQuantity] = useState(DEFAULT_QUANTITY);
 
   // TODO: при передаче от родителя нового объекта order (новый reference) эффект срабатывает каждый раз; при частых ререндерах родителя лучше [order?.id]
+  // TODO: хук зависит от внутреннего состояни, такого лучше не делать, так как хуки должны иметь в зависимостях только пропсы или внешние состояния и не должны использовать внутреннее состояние
   useEffect(() => {
     if (order) {
       setFormData({
