@@ -39,9 +39,8 @@ const OrderList = ({ orders, onEditOrder, onDeleteOrder, onViewOrder }) => {
           <Table.Tbody>
             {orders.map((row) => (
               <OrderRow
-                // TODO - вот тут ключа нет, нужно добавить
+                key={row.id}
                 order={row}
-                // TODO - вот тут функция постоянно будет пересоздаваться на каждый рендер
                 onEditOrder={(order) => onEditOrder(order)}
                 onDeleteOrder={onDeleteOrder}
                 onViewOrder={onViewOrder}

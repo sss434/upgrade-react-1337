@@ -34,14 +34,12 @@ function App() {
         return false;
       }
 
-      // TODO - parseInt(filters.userId) вызывается для каждого заказа — вынести в переменную до циклаЕ
       if (filters.userId && order.userId !== parseInt(filters.userId)) {
         return false;
       }
 
       // Поиск
       if (filters.search) {
-        // TODO: searchLower вычисляется в каждой итерации — вынести filters.search.toLowerCase() до .filter()
         const searchLower = filters.search.toLowerCase();
         const matchesOrderId = order.id.toString().includes(searchLower);
         const matchesUserName = order.user?.name
@@ -67,7 +65,6 @@ function App() {
 
   const handleViewOrder = useCallback(
     (order) => {
-      // TODO - в этой функции по сути не нужен весь order, тут нужен только id
       const orderWithDetailsNew = ordersWithDetails.find(
         (o) => o.id === order.id,
       );
@@ -91,7 +88,6 @@ function App() {
     setEditingOrder(null);
   };
 
-  // TODO - Вот тут тоже функция постоянно будет пересоздаваться на каждый рендер, следовательно memo в orderList не поможет
   const handleDeleteOrder = (orderId) => {
     if (window.confirm("Вы уверены, что хотите удалить этот заказ?")) {
       deleteOrder(orderId);
@@ -119,7 +115,6 @@ function App() {
 
         <OrderList
           orders={filteredOrders}
-          // TODO - надо вынести в отдельную функцию, хендлер для onEditOrder и использовать в callback, сейчас функцию пересоздается и не мемоизируется
           onEditOrder={(order) => {
             setEditingOrder(order);
             setShowForm(true);
@@ -141,7 +136,6 @@ function App() {
           <OrderDetails
             order={viewingOrder}
             onClose={handleCloseDetails}
-            // TODO - надо вынести в отдельную функцию, хендлер для onEditOrder и использовать в callback, сейчас функцию пересоздается и не мемоизируется, также происходит дублирование функции
             onEdit={(order) => {
               setEditingOrder(order);
               setShowForm(true);

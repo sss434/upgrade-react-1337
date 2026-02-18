@@ -18,9 +18,6 @@ import {
 import { MODAL_SIZE } from "../../constants/orderDetails.js";
 
 const OrderDetails = ({ order, onClose, onEdit }) => {
-  // TODO - order можно деструктурировать, что бы код был более читаемым и модульным
-  // const { id, orderDate, status, user, deliveryAddress, items, totalAmount } = order;
-
   if (!order) return null;
 
   return (
@@ -89,7 +86,6 @@ const OrderDetails = ({ order, onClose, onEdit }) => {
             Товары ({order.items.length})
           </Text>
           <Stack gap="xs">
-            {/* TODO - Такие карточки лучше в компонент отдельный вынести, что бы код был более читаемым и модульным */}
             {order.items.map((item) => {
               const product = products.find((p) => p.id === item.productId);
               return (

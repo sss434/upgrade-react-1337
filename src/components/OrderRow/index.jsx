@@ -12,8 +12,6 @@ import {
 } from "../../constants/orderRow.js";
 
 const OrderRow = ({ order, onEditOrder, onDeleteOrder, onViewOrder }) => {
-  // TODO - order можно деструктурировать, что бы код был более читаемым и модульным
-  // const { id, user, orderDate, status, totalAmount, items } = order;
   return (
     <Table.Tr key={order.id}>
       <Table.Td>#{order.id}</Table.Td>

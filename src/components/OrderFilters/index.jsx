@@ -33,7 +33,6 @@ const OrderFilters = ({ filters, onFiltersChange }) => {
     });
   };
 
-  // TODO Опции создаются на каждый рендер, это не очень хорошо. По итогу это будет константа, следовательно вынеси это за компонент.
   const userOptions = createUserOptions();
   const showClearButton = hasActiveFilters(filters);
 
@@ -50,7 +49,6 @@ const OrderFilters = ({ filters, onFiltersChange }) => {
 
       <Grid>
         <Grid.Col span={{ base: 12, sm: 4 }}>
-          {/* TODO -Вот тут происходате обновление фильтров на каждый ввод символа, сюда было бы неплохо добавить debounce */}
           <TextInput
             label={FILTER_LABELS.SEARCH}
             value={filters.search}

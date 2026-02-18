@@ -33,8 +33,6 @@ const OrderForm = ({ order, onSubmit, onCancel }) => {
   const [selectedProduct, setSelectedProduct] = useState("");
   const [quantity, setQuantity] = useState(DEFAULT_QUANTITY);
 
-  // TODO: при передаче от родителя нового объекта order (новый reference) эффект срабатывает каждый раз; при частых ререндерах родителя лучше [order?.id]
-  // TODO: хук зависит от внутреннего состояни, такого лучше не делать, так как хуки должны иметь в зависимостях только пропсы или внешние состояния и не должны использовать внутреннее состояние
   useEffect(() => {
     if (order) {
       setFormData({
@@ -58,7 +56,6 @@ const OrderForm = ({ order, onSubmit, onCancel }) => {
   const addItem = () => {
     if (!selectedProduct) return;
 
-    // TODO - products.find на каждый клик — при большом списке товаров лучше Map(products).get(id)
     const product = products.find((p) => p.id === parseInt(selectedProduct));
     if (!product) return;
 
@@ -79,15 +76,12 @@ const OrderForm = ({ order, onSubmit, onCancel }) => {
     setFormData((prev) => ({ ...prev, items: newItems }));
   };
 
-  // TODO - пересоздаются на каждый рендер, это константа, можно вынести за компоненту
   const userOptions = createUserOptions();
 
-  // TODO - пересоздаются на каждый рендер, это константа, можно вынести за компоненту
   const productOptions = createProductOptions();
 
   console.log("rerender");
 
-  // TODO - компонент слишком большой, стоит разбить на отдельные компоненты
   return (
     <Modal
       opened={true}
@@ -112,7 +106,6 @@ const OrderForm = ({ order, onSubmit, onCancel }) => {
             withAsterisk
           />
 
-          {/* TODO -Вот тут происходате обновление фильтров на каждый ввод символа, сюда было бы неплохо добавить debounce */}
           <TextInput
             label="Адрес доставки"
             placeholder="Введите адрес доставки"
@@ -140,7 +133,6 @@ const OrderForm = ({ order, onSubmit, onCancel }) => {
               Товары *
             </Text>
 
-            {/* TODO - Вот такой компонент лучше вынести отдельно, так как при каждом обновлении setQuantity ререндерится весь компонент, лучше вынести это в отдельный компонент, и при нажатии кнопки "Добавить" вызывать функцию addItem и обовлять основной стейт */}
             <Group mb="md">
               <Select
                 placeholder="Выберите товар"
@@ -169,9 +161,7 @@ const OrderForm = ({ order, onSubmit, onCancel }) => {
               </Paper>
             ) : (
               <Stack gap="xs">
-                {/* TODO - блок добавляемого товара лучше в компонент вынести, так как например при обновлении количества нового товара будет рендериться вся форма */}
                 {formData.items.map((item) => {
-                  // TODO - в цикле по items для каждой позиции products.find — O(items × products); лучше один раз Map(products) и .get(item.productId)
                   const product = products.find((p) => p.id === item.productId);
                   return (
                     <Paper key={item.productId} p="md" withBorder>
